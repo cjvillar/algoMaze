@@ -84,7 +84,6 @@ void movePlayerBrute(int &posX, int &posY) {
     std::cout << "Exited" << std::endl;
     return;
   }
-
   // attempt right -> down -> left
   if (worldMap[posY][posX + 1] == 0) {
     posX += 1;
@@ -146,6 +145,10 @@ int main() {
     // display mini map
     mazeMap(window, dirX, dirY, posX, posY, movementX, movementY, w, h);
     window.display();
+    // close when exit
+    if (exitMaze) {
+      window.close();
+    }
   }
 
   return EXIT_SUCCESS;

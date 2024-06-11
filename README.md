@@ -15,7 +15,7 @@ make
 ```
 
 ### TODO:
-- [ ] fix movment with brute force
+- [ ] fix movement with brute force
 - [ ] Add algorithms
 - [ ] Start Screen with menue
 - [ ] add metrics to measure time 
