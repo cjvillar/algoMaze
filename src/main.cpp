@@ -6,17 +6,17 @@ bool exitMaze = false;
 
 // variables for tile colors, easy to find and edit here
 sf::Color playerColor(230, 57, 70);
-sf::Color playerOutlinecolor(0,0,0);
+sf::Color playerOutlinecolor(0, 0, 0);
 
 sf::Color wallColor(69, 123, 157);
 sf::Color exitColor(168, 218, 220);
-//path
+// path
 sf::Color visitedColor(230, 57, 70);
 
-//background color
-sf::Color bgColor(241,250,238);
+// background color
+sf::Color bgColor(241, 250, 238);
 
-//grid lines
+// grid lines
 sf::Color gridLines(29, 53, 87);
 
 int worldMap[mapWidth][mapHeight] = {
@@ -106,31 +106,6 @@ void mazeMap(sf::RenderWindow &window, double dirX, double dirY, int posX,
   int offsetX = (windowWidth - tileSizeX * mapWidth) / 2;
   int offsetY = (windowHeight - tileSizeY * mapHeight) / 2;
 
-  // draw the player
-  sf::RectangleShape player(
-      sf::Vector2f(tileSizeX * playerScale, tileSizeY * playerScale));
-  player.setFillColor(sf::Color(playerColor));  // player color
-  player.setOutlineColor(sf::Color(playerOutlinecolor));
-  player.setOrigin(player.getSize().x / 2, player.getSize().y / 2);
-  player.setPosition(offsetX + posX * tileSizeX + tileSizeX / 2,
-                     offsetY + posY * tileSizeY + +tileSizeY / 2);
-
-  window.draw(player);
-
-  // draw the gridlines
-  for (int y = 0; y <= mapHeight; y++) {
-    sf::RectangleShape line(sf::Vector2f(windowWidth, 1));
-    line.setFillColor(sf::Color(gridLines));  // gridline y
-    line.setPosition(0, offsetY + y * tileSizeY);
-    window.draw(line);
-  }
-  for (int x = 0; x <= mapWidth; x++) {
-    sf::RectangleShape line(sf::Vector2f(1, windowHeight));
-    line.setFillColor(sf::Color(gridLines));  // grid line x
-    line.setPosition(offsetX + x * tileSizeX, 0);
-    window.draw(line);
-  }
-
   // draw the tiles
   for (int y = 0; y < mapHeight; y++) {
     for (int x = 0; x < mapWidth; x++) {
@@ -151,6 +126,31 @@ void mazeMap(sf::RenderWindow &window, double dirX, double dirY, int posX,
         window.draw(mapTile);
       }
     }
+  }
+
+  // draw the player
+  sf::RectangleShape player(
+      sf::Vector2f(tileSizeX * playerScale, tileSizeY * playerScale));
+  player.setFillColor(sf::Color(playerColor));  // player color
+  player.setOutlineColor(sf::Color(playerOutlinecolor));
+  player.setOrigin(player.getSize().x / 2, player.getSize().y / 2);
+  player.setPosition(offsetX + posX * tileSizeX + tileSizeX / 2,
+                     offsetY + posY * tileSizeY + +tileSizeY / 2);
+
+  window.draw(player);
+
+  // draw the gridlines last
+  for (int y = 0; y <= mapHeight; y++) {
+    sf::RectangleShape line(sf::Vector2f(windowWidth, 1));
+    line.setFillColor(sf::Color(gridLines));  // gridline y
+    line.setPosition(0, offsetY + y * tileSizeY);
+    window.draw(line);
+  }
+  for (int x = 0; x <= mapWidth; x++) {
+    sf::RectangleShape line(sf::Vector2f(1, windowHeight));
+    line.setFillColor(sf::Color(gridLines));  // grid line x
+    line.setPosition(offsetX + x * tileSizeX, 0);
+    window.draw(line);
   }
 }
 
