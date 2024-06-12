@@ -14,3 +14,4 @@
 #include <SFML/System.hpp>
 
 //includes
+#include"startScreen.h"

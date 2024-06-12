@@ -3,12 +3,13 @@
 const int mapWidth = 24;
 const int mapHeight = 24;
 bool exitMaze = false;
+bool startScreen = true;  // start screen flag
 
 // variables for tile colors, easy to find and edit here
 sf::Color playerColor(230, 57, 70);
 sf::Color playerOutlinecolor(0, 0, 0);
 
-//obsticals 
+// obsticals
 sf::Color wallColor(69, 123, 157);
 sf::Color exitColor(168, 218, 220);
 // path
@@ -48,10 +49,6 @@ int worldMap[mapWidth][mapHeight] = {
 
 void handleMouseInput(sf::RenderWindow &window, int windowWidth,
                       int windowHeight) {
-  static sf::Clock clock;
-  static bool firstClick = false;
-  bool doubleClick = false;
-
   if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 
@@ -64,32 +61,16 @@ void handleMouseInput(sf::RenderWindow &window, int windowWidth,
     int gridX = (mousePos.x - offsetX) / tileSizeX;
     int gridY = (mousePos.y - offsetY) / tileSizeY;
 
-    if (gridX >= 0 && gridX < mapWidth && gridY >= 0 && gridY < mapHeight) {
-      if (firstClick && clock.getElapsedTime().asMilliseconds() < 500) {
-        doubleClick = true;
-        firstClick = false;
-      } else {
-        firstClick = true;
-        clock.restart();
-      }
-
-      if (doubleClick) {
-        worldMap[gridY][gridX] = 0;  // clear tile on double-click
-      } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) ||
-                 sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)) {
-        worldMap[gridY][gridX] = 4;  // add exit on shift+click
-      } else {
-        if (worldMap[gridY][gridX] == 0) {
-          worldMap[gridY][gridX] = 1;  // add wall on single click
-        } else if (worldMap[gridY][gridX] == 1) {
-          worldMap[gridY][gridX] = 4;  // change wall to exit
-        } else if (worldMap[gridY][gridX] == 4) {
-          worldMap[gridY][gridX] = 0;  // clear exit
-        }
-      }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) {
+      worldMap[gridY][gridX] = 4;  // hold 4 key and mouse click to draw exit
     }
-  } else {
-    firstClick = false;  // reset firstClick if button is not pressed
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0)) {
+      worldMap[gridY][gridX] = 0; // hold 0 key and mouse click to remove wall
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
+      worldMap[gridY][gridX] = 1;  // hold 1 key and mouse click to draw wall
+    }
   }
 }
 
@@ -205,31 +186,35 @@ int main() {
           event.key.code == sf::Keyboard::Enter && !exitMaze)
         //  movement logic
         if (!exitMaze) {
+          bool startScreen = true;  // Start screen flag
           movePlayerBrute(posX, posY);
         }
     }
 
-    oldTime = time;
-    time = clock.getElapsedTime().asSeconds();
-    int movementX = 0;
-    int movementY = 0;
+    if (startScreen) {
+      RenderStartScreen(window, startScreen, bgColor);
+    } else {
+      oldTime = time;
+      time = clock.getElapsedTime().asSeconds();
+      int movementX = 0;
+      int movementY = 0;
 
-    // //  movement logic
-    // if (!exitMaze) {
-    //   movePlayerBrute(posX, posY);
-    // } //uncoment for autorun
+      // //  movement logic
+      // if (!exitMaze) {
+      //   movePlayerBrute(posX, posY);
+      // } //uncoment for autorun
 
-    // clear window with a white background
-    window.clear(sf::Color(bgColor));
+      // clear window with a white background
+      window.clear(sf::Color(bgColor));
 
-    handleMouseInput(window, w, h);
-    mazeMap(window, dirX, dirY, posX, posY, movementX, movementY, w, h);
-    window.display();
+      handleMouseInput(window, w, h);
+      mazeMap(window, dirX, dirY, posX, posY, movementX, movementY, w, h);
+      window.display();
 
-    if (exitMaze) {
-      window.close();
+      if (exitMaze) {
+        window.close();
+      }
     }
   }
-
   return EXIT_SUCCESS;
 }
