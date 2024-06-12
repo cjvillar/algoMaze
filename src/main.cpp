@@ -5,12 +5,19 @@ const int mapHeight = 24;
 bool exitMaze = false;
 
 // variables for tile colors, easy to find and edit here
-sf::Color playerColor(0, 0, 0);
-sf::Color wallColor(138, 161, 180);
-sf::Color exitColor(0, 255, 0);
-sf::Color visitedColor(255, 0, 0);
-sf::Color gridLinex(0, 0, 0);
-sf::Color gridLiney(0, 0, 0);
+sf::Color playerColor(230, 57, 70);
+sf::Color playerOutlinecolor(0,0,0);
+
+sf::Color wallColor(69, 123, 157);
+sf::Color exitColor(168, 218, 220);
+//path
+sf::Color visitedColor(230, 57, 70);
+
+//background color
+sf::Color bgColor(241,250,238);
+
+//grid lines
+sf::Color gridLines(29, 53, 87);
 
 int worldMap[mapWidth][mapHeight] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -103,6 +110,7 @@ void mazeMap(sf::RenderWindow &window, double dirX, double dirY, int posX,
   sf::RectangleShape player(
       sf::Vector2f(tileSizeX * playerScale, tileSizeY * playerScale));
   player.setFillColor(sf::Color(playerColor));  // player color
+  player.setOutlineColor(sf::Color(playerOutlinecolor));
   player.setOrigin(player.getSize().x / 2, player.getSize().y / 2);
   player.setPosition(offsetX + posX * tileSizeX + tileSizeX / 2,
                      offsetY + posY * tileSizeY + +tileSizeY / 2);
@@ -112,13 +120,13 @@ void mazeMap(sf::RenderWindow &window, double dirX, double dirY, int posX,
   // draw the gridlines
   for (int y = 0; y <= mapHeight; y++) {
     sf::RectangleShape line(sf::Vector2f(windowWidth, 1));
-    line.setFillColor(sf::Color(gridLiney));  // gridline y
+    line.setFillColor(sf::Color(gridLines));  // gridline y
     line.setPosition(0, offsetY + y * tileSizeY);
     window.draw(line);
   }
   for (int x = 0; x <= mapWidth; x++) {
     sf::RectangleShape line(sf::Vector2f(1, windowHeight));
-    line.setFillColor(sf::Color(gridLinex));  // grid line x
+    line.setFillColor(sf::Color(gridLines));  // grid line x
     line.setPosition(offsetX + x * tileSizeX, 0);
     window.draw(line);
   }
@@ -210,7 +218,7 @@ int main() {
     // } //uncoment for autorun
 
     // clear window with a white background
-    window.clear(sf::Color::White);
+    window.clear(sf::Color(bgColor));
 
     handleMouseInput(window, w, h);
     mazeMap(window, dirX, dirY, posX, posY, movementX, movementY, w, h);
