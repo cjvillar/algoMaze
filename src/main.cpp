@@ -4,6 +4,14 @@ const int mapWidth = 24;
 const int mapHeight = 24;
 bool exitMaze = false;
 
+// variables for tile colors, easy to find and edit here
+sf::Color playerColor(0, 0, 0);
+sf::Color wallColor(138, 161, 180);
+sf::Color exitColor(0, 255, 0);
+sf::Color visitedColor(255, 0, 0);
+sf::Color gridLinex(0, 0, 0);
+sf::Color gridLiney(0, 0, 0);
+
 int worldMap[mapWidth][mapHeight] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -26,7 +34,7 @@ int worldMap[mapWidth][mapHeight] = {
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4},
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 4}};
 
 void handleMouseInput(sf::RenderWindow &window, int windowWidth,
@@ -94,22 +102,23 @@ void mazeMap(sf::RenderWindow &window, double dirX, double dirY, int posX,
   // draw the player
   sf::RectangleShape player(
       sf::Vector2f(tileSizeX * playerScale, tileSizeY * playerScale));
+  player.setFillColor(sf::Color(playerColor));  // player color
   player.setOrigin(player.getSize().x / 2, player.getSize().y / 2);
   player.setPosition(offsetX + posX * tileSizeX + tileSizeX / 2,
-                     offsetY + posY * tileSizeY + + tileSizeY / 2);
+                     offsetY + posY * tileSizeY + +tileSizeY / 2);
 
   window.draw(player);
 
   // draw the gridlines
   for (int y = 0; y <= mapHeight; y++) {
     sf::RectangleShape line(sf::Vector2f(windowWidth, 1));
-    line.setFillColor(sf::Color(0, 76, 109));
+    line.setFillColor(sf::Color(gridLiney));  // gridline y
     line.setPosition(0, offsetY + y * tileSizeY);
     window.draw(line);
   }
   for (int x = 0; x <= mapWidth; x++) {
     sf::RectangleShape line(sf::Vector2f(1, windowHeight));
-    line.setFillColor(sf::Color(255, 255, 255));
+    line.setFillColor(sf::Color(gridLinex));  // grid line x
     line.setPosition(offsetX + x * tileSizeX, 0);
     window.draw(line);
   }
@@ -120,14 +129,14 @@ void mazeMap(sf::RenderWindow &window, double dirX, double dirY, int posX,
       if (worldMap[y][x] > 0) {
         sf::RectangleShape mapTile(
             sf::Vector2f(tileSizeX * tileScale, tileSizeY * tileScale));
-        mapTile.setFillColor(sf::Color(138, 161, 180));
+        mapTile.setFillColor(sf::Color(wallColor));
 
         if (worldMap[y][x] == 4) {
-          mapTile.setFillColor(sf::Color(0, 255, 0));  // exit tile
+          mapTile.setFillColor(sf::Color(exitColor));  // exit tile
         }
 
         if (worldMap[y][x] == 5) {
-          mapTile.setFillColor(sf::Color(255, 0, 0));  // visited tile
+          mapTile.setFillColor(sf::Color(visitedColor));  // visited tile
         }
 
         mapTile.setPosition(offsetX + x * tileSizeX, offsetY + y * tileSizeY);
@@ -198,9 +207,11 @@ int main() {
     // //  movement logic
     // if (!exitMaze) {
     //   movePlayerBrute(posX, posY);
-    // }
+    // } //uncoment for autorun
 
-    window.clear();
+    // clear window with a white background
+    window.clear(sf::Color::White);
+
     handleMouseInput(window, w, h);
     mazeMap(window, dirX, dirY, posX, posY, movementX, movementY, w, h);
     window.display();
