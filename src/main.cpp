@@ -8,6 +8,7 @@ bool exitMaze = false;
 sf::Color playerColor(230, 57, 70);
 sf::Color playerOutlinecolor(0, 0, 0);
 
+//obsticals 
 sf::Color wallColor(69, 123, 157);
 sf::Color exitColor(168, 218, 220);
 // path
@@ -41,7 +42,8 @@ int worldMap[mapWidth][mapHeight] = {
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4},
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 4}};
 
 void handleMouseInput(sf::RenderWindow &window, int windowWidth,
@@ -179,7 +181,7 @@ void movePlayerBrute(int &posX, int &posY) {
 }
 
 int main() {
-  int w = 960, h = 540;
+  int w = 528, h = 528;
   int posX = 2, posY = 1;
   double dirX = -1, dirY = 0;
 
