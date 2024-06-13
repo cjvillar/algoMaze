@@ -15,10 +15,12 @@ make
 ```
 
 ### TODO:
-- [ ] fix movement with brute force
-- [ ] Add algorithms
+- [ ] fix movement with brute force (move up)
+- [ ] fix bfs such that it shows final path only
+- [ ] Add more algorithms
 - [ ] Start Screen with menue
 - [ ] add metrics to measure time 
+
 
 
 
