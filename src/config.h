@@ -15,3 +15,4 @@
 
 //includes
 #include"startScreen.h"
+#include"bfs.h"

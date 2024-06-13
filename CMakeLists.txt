@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # add source files
 add_executable(
 MyProject
+src/bfs.cpp
 src/startScreen.cpp
 src/main.cpp 
 )

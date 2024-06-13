@@ -21,6 +21,7 @@ sf::Color bgColor(241, 250, 238);
 // grid lines
 sf::Color gridLines(29, 53, 87);
 
+//25 x 24
 int worldMap[mapWidth][mapHeight] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -187,7 +188,9 @@ int main() {
         //  movement logic
         if (!exitMaze) {
           bool startScreen = true;  // Start screen flag
-          movePlayerBrute(posX, posY);
+
+          //movePlayerBrute(posX, posY);
+          bfs(worldMap, posX, posY, mapWidth, mapHeight);
         }
     }
 
@@ -201,7 +204,8 @@ int main() {
 
       // //  movement logic
       // if (!exitMaze) {
-      //   movePlayerBrute(posX, posY);
+      //   //movePlayerBrute(posX, posY);
+      //   bfs(worldMap, posX, posY, mapWidth, mapHeight);
       // } //uncoment for autorun
 
       // clear window with a white background
