@@ -21,7 +21,7 @@ sf::Color bgColor(241, 250, 238);
 // grid lines
 sf::Color gridLines(29, 53, 87);
 
-//25 x 24
+// 25 x 24
 int worldMap[mapWidth][mapHeight] = {
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -66,7 +66,7 @@ void handleMouseInput(sf::RenderWindow &window, int windowWidth,
       worldMap[gridY][gridX] = 4;  // hold 4 key and mouse click to draw exit
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0)) {
-      worldMap[gridY][gridX] = 0; // hold 0 key and mouse click to remove wall
+      worldMap[gridY][gridX] = 0;  // hold 0 key and mouse click to remove wall
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
@@ -146,79 +146,91 @@ void movePlayerBrute(int &posX, int &posY) {
     return;
   }
 
+//need solution to go up
+//if in a bowl
+  bool goingUp = false;
   if (worldMap[posY][posX + 1] == 0) {
-    posX += 1;
+    posX += 1;  // right
+    std::cout << "Going Right!" << std::endl;
   } else if (worldMap[posY + 1][posX] == 0) {
-    posY += 1;
-  } else {
-    while (worldMap[posY][posX - 1] == 0) {
-      posX -= 1;
-    }
-    if (worldMap[posY + 1][posX] == 0) {
-      posY += 1;
-    }
+    posY += 1;  //down
+    std::cout << "Going Down!" << std::endl;
+  } else if ((worldMap[posY][posX + 1] != 1 || 5) && worldMap[posY][posX - 1] == 0) {
+    posX -= 1;  //back track left
+    std::cout << "Going left!" << std::endl;
+  } 
+
+  else if (((worldMap[posY][posX + 1] != 1 || 5) || goingUp) && worldMap[posY - 1][posX] == 0) {
+    posY -= 1;//up
+    goingUp = true;
+    std::cout << "Going Up! " <<  goingUp << std::endl;
+
   }
-  // mark the current position as visited
-  worldMap[posY][posX] = 5;
-}
+  else if(worldMap[posY + 1][posX] == 5){// if the last block it 5  (path) then go left
+     posX -= 1;
+    std::cout << "stuck!" << std::endl;}
+  
+    // mark the current position as visited
+    worldMap[posY][posX] = 5;
+  }
 
-int main() {
-  int w = 528, h = 528;
-  int posX = 2, posY = 1;
-  double dirX = -1, dirY = 0;
+  int main() {
+    int w = 528, h = 528;
+    int posX = 2, posY = 1;
+    double dirX = -1, dirY = 0;
 
-  double time = 0;
-  double oldTime = 0;
+    double time = 0;
+    double oldTime = 0;
 
-  sf::RenderWindow window(sf::VideoMode(w, h), "Map Maze Plus Plus");
-  window.setFramerateLimit(60);
+    sf::RenderWindow window(sf::VideoMode(w, h), "Map Maze Plus Plus");
+    window.setFramerateLimit(60);
 
-  sf::Clock clock;
-  sf::Time fps;
+    sf::Clock clock;
+    sf::Time fps;
 
-  while (window.isOpen()) {
-    sf::Event event;
-    while (window.pollEvent(event)) {
-      if (event.type == sf::Event::Closed) window.close();
-      if (event.type == sf::Event::KeyPressed &&
-          event.key.code == sf::Keyboard::Escape)
-        window.close();
-      if (event.type == sf::Event::KeyPressed &&
-          event.key.code == sf::Keyboard::Enter && !exitMaze)
-        //  movement logic
-        if (!exitMaze) {
-          bool startScreen = true;  // Start screen flag
+    while (window.isOpen()) {
+      sf::Event event;
+      while (window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed) window.close();
+        if (event.type == sf::Event::KeyPressed &&
+            event.key.code == sf::Keyboard::Escape)
+          window.close();
+        if (event.type == sf::Event::KeyPressed &&
+            event.key.code == sf::Keyboard::Enter && !exitMaze)
+          //  movement logic
+          if (!exitMaze) {
+            bool startScreen = true;  // Start screen flag
 
-          //movePlayerBrute(posX, posY);
-          bfs(worldMap, posX, posY, mapWidth, mapHeight);
+            movePlayerBrute(posX, posY);
+            // bfs(worldMap, posX, posY, mapWidth, mapHeight);
+          }
+      }
+
+      if (startScreen) {
+        RenderStartScreen(window, startScreen, bgColor);
+      } else {
+        oldTime = time;
+        time = clock.getElapsedTime().asSeconds();
+        int movementX = 0;
+        int movementY = 0;
+
+        // //  movement logic
+        // if (!exitMaze) {
+        //   //movePlayerBrute(posX, posY);
+        //   bfs(worldMap, posX, posY, mapWidth, mapHeight);
+        // } //uncoment for autorun
+
+        // clear window with a white background
+        window.clear(sf::Color(bgColor));
+
+        handleMouseInput(window, w, h);
+        mazeMap(window, dirX, dirY, posX, posY, movementX, movementY, w, h);
+        window.display();
+
+        if (exitMaze) {
+          window.close();
         }
-    }
-
-    if (startScreen) {
-      RenderStartScreen(window, startScreen, bgColor);
-    } else {
-      oldTime = time;
-      time = clock.getElapsedTime().asSeconds();
-      int movementX = 0;
-      int movementY = 0;
-
-      // //  movement logic
-      // if (!exitMaze) {
-      //   //movePlayerBrute(posX, posY);
-      //   bfs(worldMap, posX, posY, mapWidth, mapHeight);
-      // } //uncoment for autorun
-
-      // clear window with a white background
-      window.clear(sf::Color(bgColor));
-
-      handleMouseInput(window, w, h);
-      mazeMap(window, dirX, dirY, posX, posY, movementX, movementY, w, h);
-      window.display();
-
-      if (exitMaze) {
-        window.close();
       }
     }
+    return EXIT_SUCCESS;
   }
-  return EXIT_SUCCESS;
-}
